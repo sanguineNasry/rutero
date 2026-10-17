@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Rutero_Extractor_Android # 👈 Aquí va el nombre exacto de tu carpeta
+        working-directory: Rutero_Extractor_Android
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
         with:
-          path: Rutero_Extractor_Android # Se descarga dentro de esta carpeta
+          path: Rutero_Extractor_Android
 
       - name: Configurar JDK 17
         uses: actions/setup-java@v4
@@ -23,9 +23,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # 1. Soluciona el error "Permission denied" en gradlew
       - name: Dar permisos de ejecución a gradlew
         run: chmod +x ./gradlew
 
+      # 2. Soluciona el error "SDK location not found" creando el archivo local.properties
+      - name: Crear local.properties con la ruta del SDK
+        run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+
+      # 3. Compila el APK
       - name: Compilar APK de depuración (Debug)
         run: ./gradlew assembleDebug
 
