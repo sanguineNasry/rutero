@@ -1,41 +1,26 @@
-name: Build Android APK
-
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: /Rutero_Extractor_Android_fuente/
+        working-directory: ${{ github.workspace }}/Rutero_Extractor_Android_fuente
+
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
         with:
-          path: /Rutero_Extractor_Android_fuente/
+          path: Rutero_Extractor_Android_fuente
 
       - name: Configurar JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          distribution: temurin
+          java-version: "17"
 
-      # 1. Soluciona el error "Permission denied" en gradlew
-      - name: Dar permisos de ejecución a gradlew
-        run: chmod +x ./gradlew
-
-      # 2. Soluciona el error "SDK location not found" creando el archivo local.properties
-      - name: Crear local.properties con la ruta del SDK
-        run: echo "sdk.dir=$ANDROID_HOME" > local.properties
-
-      # 3. Compila el APK
-      - name: Compilar APK de depuración (Debug)
+      - name: Build
         run: ./gradlew assembleDebug
 
-      - name: Subir APK como artefacto
+      - name: Subir artefacto
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
