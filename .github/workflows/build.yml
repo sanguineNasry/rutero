@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Rutero_Extractor_Android
+        working-directory: ../Rutero_Extractor_Android
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
